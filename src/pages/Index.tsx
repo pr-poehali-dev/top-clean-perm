@@ -477,7 +477,7 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg text-muted-foreground">г. Пермь, ул. Ленина, 99</p>
+                  <p className="text-lg text-muted-foreground">г. Пермь</p>
                 </CardContent>
               </Card>
 
