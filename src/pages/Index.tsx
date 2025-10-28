@@ -489,7 +489,7 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg text-muted-foreground">+7 (342) 123-45-67</p>
+                  <p className="text-lg text-muted-foreground">+7 (919) 707-12-18</p>
                 </CardContent>
               </Card>
 
