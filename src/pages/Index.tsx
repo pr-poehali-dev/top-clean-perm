@@ -26,6 +26,7 @@ const Index = () => {
     {
       title: 'Уборка квартир',
       description: 'Комплексная уборка жилых помещений любой площади',
+      details: 'Влажная уборка всех поверхностей, пылесос, мытье полов, очистка сантехники, вынос мусора',
       price: 'от 2 500 ₽',
       icon: 'Home',
       basePrice: 2500,
@@ -34,6 +35,7 @@ const Index = () => {
     {
       title: 'Уборка офисов',
       description: 'Профессиональная уборка бизнес-центров и офисных помещений',
+      details: 'Уборка рабочих мест, переговорных, кухонной зоны, санузлов. График под ваш режим работы',
       price: 'от 3 000 ₽',
       icon: 'Building2',
       basePrice: 3000,
@@ -42,6 +44,7 @@ const Index = () => {
     {
       title: 'Генеральная уборка',
       description: 'Глубокая очистка всех поверхностей, включая труднодоступные места',
+      details: 'Мытье окон, плинтусов, радиаторов, люстр, шкафов внутри. Чистка духовки, плиты, вытяжки',
       price: 'от 4 500 ₽',
       icon: 'Sparkles',
       basePrice: 4500,
@@ -50,6 +53,7 @@ const Index = () => {
     {
       title: 'Уборка после ремонта',
       description: 'Удаление строительной пыли и загрязнений после ремонтных работ',
+      details: 'Очистка от краски, шпаклевки, пыли. Мытье окон, стен, потолков. Финальная подготовка к заселению',
       price: 'от 5 000 ₽',
       icon: 'Hammer',
       basePrice: 5000,
@@ -58,6 +62,7 @@ const Index = () => {
     {
       title: 'Мойка окон',
       description: 'Профессиональная мойка окон с внутренней и внешней стороны',
+      details: 'Очистка стекол, рам, подоконников. Работаем на любой высоте. Без разводов и пятен',
       price: 'от 150 ₽/м²',
       icon: 'Droplets',
       basePrice: 0,
@@ -66,6 +71,7 @@ const Index = () => {
     {
       title: 'Химчистка мебели',
       description: 'Глубокая очистка мягкой мебели и ковровых покрытий',
+      details: 'Удаление пятен, запахов, пыли. Профессиональное оборудование и безопасные средства',
       price: 'от 1 500 ₽',
       icon: 'Sofa',
       basePrice: 1500,
@@ -367,7 +373,10 @@ const Index = () => {
                     <Icon name={service.icon as any} className="text-accent" size={28} />
                   </div>
                   <CardTitle className="text-2xl mb-2">{service.title}</CardTitle>
-                  <CardDescription className="text-base">{service.description}</CardDescription>
+                  <CardDescription className="text-base mb-3">{service.description}</CardDescription>
+                  <div className="text-sm text-muted-foreground leading-relaxed pt-2 border-t">
+                    {service.details}
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-accent">{service.price}</div>
