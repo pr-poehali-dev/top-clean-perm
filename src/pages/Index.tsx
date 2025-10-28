@@ -3,49 +3,122 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
+  const [orderDialogOpen, setOrderDialogOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
+  const [area, setArea] = useState('');
+  const [rooms, setRooms] = useState('');
+  const [calculatedPrice, setCalculatedPrice] = useState(0);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [comments, setComments] = useState('');
 
   const services = [
     {
       title: 'Уборка квартир',
       description: 'Комплексная уборка жилых помещений любой площади',
       price: 'от 2 500 ₽',
-      icon: 'Home'
+      icon: 'Home',
+      basePrice: 2500,
+      pricePerSqm: 50
     },
     {
       title: 'Уборка офисов',
       description: 'Профессиональная уборка бизнес-центров и офисных помещений',
       price: 'от 3 000 ₽',
-      icon: 'Building2'
+      icon: 'Building2',
+      basePrice: 3000,
+      pricePerSqm: 55
     },
     {
       title: 'Генеральная уборка',
       description: 'Глубокая очистка всех поверхностей, включая труднодоступные места',
       price: 'от 4 500 ₽',
-      icon: 'Sparkles'
+      icon: 'Sparkles',
+      basePrice: 4500,
+      pricePerSqm: 80
     },
     {
       title: 'Уборка после ремонта',
       description: 'Удаление строительной пыли и загрязнений после ремонтных работ',
       price: 'от 5 000 ₽',
-      icon: 'Hammer'
+      icon: 'Hammer',
+      basePrice: 5000,
+      pricePerSqm: 100
     },
     {
       title: 'Мойка окон',
       description: 'Профессиональная мойка окон с внутренней и внешней стороны',
       price: 'от 150 ₽/м²',
-      icon: 'Droplets'
+      icon: 'Droplets',
+      basePrice: 0,
+      pricePerSqm: 150
     },
     {
       title: 'Химчистка мебели',
       description: 'Глубокая очистка мягкой мебели и ковровых покрытий',
       price: 'от 1 500 ₽',
-      icon: 'Sofa'
+      icon: 'Sofa',
+      basePrice: 1500,
+      pricePerSqm: 200
     }
   ];
+
+  const calculatePrice = (serviceTitle: string, sqmArea: string, roomsCount: string) => {
+    const service = services.find(s => s.title === serviceTitle);
+    if (!service || !sqmArea) {
+      setCalculatedPrice(0);
+      return;
+    }
+
+    const areaNum = parseFloat(sqmArea);
+    const roomsNum = roomsCount ? parseInt(roomsCount) : 0;
+    
+    let price = service.basePrice + (areaNum * service.pricePerSqm);
+    
+    if (roomsNum > 2) {
+      price += (roomsNum - 2) * 500;
+    }
+
+    setCalculatedPrice(Math.round(price));
+  };
+
+  const handleServiceChange = (value: string) => {
+    setSelectedService(value);
+    calculatePrice(value, area, rooms);
+  };
+
+  const handleAreaChange = (value: string) => {
+    setArea(value);
+    calculatePrice(selectedService, value, rooms);
+  };
+
+  const handleRoomsChange = (value: string) => {
+    setRooms(value);
+    calculatePrice(selectedService, area, value);
+  };
+
+  const handleSubmitOrder = () => {
+    alert(`Спасибо, ${name}! Ваша заявка принята.\n\nУслуга: ${selectedService}\nПлощадь: ${area} м²\nКомнат: ${rooms}\nСтоимость: ${calculatedPrice.toLocaleString()} ₽\n\nМы свяжемся с вами по телефону ${phone} в ближайшее время.`);
+    setOrderDialogOpen(false);
+    setSelectedService('');
+    setArea('');
+    setRooms('');
+    setCalculatedPrice(0);
+    setName('');
+    setPhone('');
+    setAddress('');
+    setComments('');
+  };
 
   const portfolio = [
     {
@@ -124,7 +197,10 @@ const Index = () => {
             <a href="#faq" className="text-foreground hover:text-accent transition-colors">FAQ</a>
             <a href="#contacts" className="text-foreground hover:text-accent transition-colors">Контакты</a>
           </div>
-          <Button className="bg-accent hover:bg-accent/90 text-primary font-semibold">
+          <Button 
+            onClick={() => setOrderDialogOpen(true)}
+            className="bg-accent hover:bg-accent/90 text-primary font-semibold"
+          >
             Заказать уборку
           </Button>
         </nav>
@@ -148,9 +224,130 @@ const Index = () => {
                 <Icon name="Phone" className="mr-2" size={20} />
                 Позвонить сейчас
               </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white font-semibold text-lg px-8">
-                Рассчитать стоимость
-              </Button>
+              <Dialog open={orderDialogOpen} onOpenChange={setOrderDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white font-semibold text-lg px-8">
+                    Рассчитать стоимость
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl">Заказать уборку</DialogTitle>
+                    <DialogDescription>
+                      Выберите услугу и укажите параметры для расчёта стоимости
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <div className="space-y-6 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="service">Тип услуги *</Label>
+                      <Select value={selectedService} onValueChange={handleServiceChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выберите услугу" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {services.map((service, index) => (
+                            <SelectItem key={index} value={service.title}>
+                              {service.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="area">Площадь (м²) *</Label>
+                        <Input
+                          id="area"
+                          type="number"
+                          placeholder="Например, 65"
+                          value={area}
+                          onChange={(e) => handleAreaChange(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="rooms">Количество комнат</Label>
+                        <Input
+                          id="rooms"
+                          type="number"
+                          placeholder="Например, 3"
+                          value={rooms}
+                          onChange={(e) => handleRoomsChange(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {calculatedPrice > 0 && (
+                      <Card className="bg-accent/10 border-accent/20">
+                        <CardContent className="pt-6">
+                          <div className="text-center">
+                            <p className="text-sm text-muted-foreground mb-2">Предварительная стоимость</p>
+                            <p className="text-4xl font-bold text-accent">{calculatedPrice.toLocaleString()} ₽</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    <div className="border-t pt-6 space-y-4">
+                      <h4 className="font-semibold text-lg">Контактные данные</h4>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Имя *</Label>
+                        <Input
+                          id="name"
+                          placeholder="Как к вам обращаться?"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Телефон *</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          placeholder="+7 (___) ___-__-__"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address">Адрес</Label>
+                        <Input
+                          id="address"
+                          placeholder="Улица, дом, квартира"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="comments">Комментарий</Label>
+                        <Textarea
+                          id="comments"
+                          placeholder="Дополнительные пожелания..."
+                          value={comments}
+                          onChange={(e) => setComments(e.target.value)}
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+
+                    <Button 
+                      onClick={handleSubmitOrder}
+                      disabled={!selectedService || !area || !name || !phone}
+                      className="w-full bg-accent hover:bg-accent/90 text-primary font-semibold text-lg py-6"
+                      size="lg"
+                    >
+                      Оформить заказ
+                      {calculatedPrice > 0 && ` за ${calculatedPrice.toLocaleString()} ₽`}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -329,7 +526,11 @@ const Index = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex justify-center">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-10">
+                <Button 
+                  onClick={() => setOrderDialogOpen(true)}
+                  size="lg" 
+                  className="bg-accent hover:bg-accent/90 text-primary font-semibold text-lg px-10"
+                >
                   Заказать со скидкой
                 </Button>
               </CardContent>
