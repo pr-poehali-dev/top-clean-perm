@@ -122,19 +122,19 @@ const Index = () => {
 
   const portfolio = [
     {
-      title: 'Трехкомнатная квартира',
-      area: '85 м²',
-      image: 'https://cdn.poehali.dev/projects/11733335-c2e5-427b-94ed-deb33773c198/files/787ed74d-5c23-4e2d-8765-7eb438fba1c9.jpg'
+      title: 'Чистка плиты',
+      area: 'До и после',
+      image: 'https://cdn.poehali.dev/files/389e0be7-d5c2-4e18-98dc-c44763946602.jpg'
     },
     {
-      title: 'Офис IT-компании',
-      area: '120 м²',
-      image: 'https://cdn.poehali.dev/projects/11733335-c2e5-427b-94ed-deb33773c198/files/858ebfa4-a79d-4ec0-beec-3c728ed1fd32.jpg'
+      title: 'Чистка духовки',
+      area: 'До и после',
+      image: 'https://cdn.poehali.dev/files/716c138e-4c8c-4c38-be43-e8872facc563.jpg'
     },
     {
-      title: 'Загородный дом',
-      area: '200 м²',
-      image: 'https://cdn.poehali.dev/projects/11733335-c2e5-427b-94ed-deb33773c198/files/77f7f40c-3211-4e43-94d6-06fa04ce4670.jpg'
+      title: 'Уборка ванной',
+      area: 'До и после',
+      image: 'https://cdn.poehali.dev/files/a2adb74a-be0a-4d5e-aabe-5bf42eae0ef6.jpg'
     }
   ];
 
